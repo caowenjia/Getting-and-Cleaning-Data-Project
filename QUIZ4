@@ -1,0 +1,43 @@
+getwd()
+setwd("/Users/Kimberly/Desktop/RProgrammingAssignment4")
+data<-read.csv("getdata.csv",header=TRUE)
+head(data)
+strsplit(names(data),split="wgtp")[[123]]
+###q2
+library(plyr)
+library(dplyr)
+data1<-read.csv("getdata-data-GDP.csv",header=TRUE)
+head(data1)
+data1<-data1[2:195,c(1,2,4,5)]
+head(data1)
+#rownames(data1)<-NULL
+#head(data1)
+#data1<- rename(data1, CountryCode = X)
+names(data1) <- gsub(pattern = "\\.", 
+                  replacement = "", 
+                  x = names(data1))
+names(data1) <- tolower(names(data1))
+head(data1)
+data1$usdollars <- gsub(pattern = ",", 
+                     replacement = "", 
+                     x = data1$x3)
+mean(as.numeric(data1$usdollars),na.rm=TRUE)
+#q3
+grep("^United",data1$x2)
+#q4
+data2<-read.csv("getdata-data-EDSTATS_Country.csv",header=TRUE)
+head(data2)
+names(data2) <- tolower(gsub(pattern = "\\.", 
+                            replacement = "", 
+                            x = names(data2)))
+data_merge <- join(x = data1, y = data2)
+sum(grepl(pattern = "^[Ff]iscal(.*)[Yy]ear(.*)[Ee]nd(.)*[Jj]une", 
+          x = data_merge$specialnotes) == TRUE)
+##q5
+library(quantmod)
+amzn = getSymbols("AMZN",auto.assign=FALSE)
+sampleTimes = index(amzn)
+amzn<-data.frame(amzn)
+sum(format(as.Date(x = rownames(amzn), format = "%Y-%m-%d"), "%Y") == 2012)
+git remote add origin https://github.com/caowenjia/Programming-Assignment-4.git
+git push -u origin master
